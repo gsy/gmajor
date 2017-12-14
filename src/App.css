@@ -1,3 +1,6 @@
+:root {
+  --element-font-size: 100px;
+}
 .App {
   text-align: center;
 }
@@ -22,12 +25,54 @@
   font-size: large;
 }
 
-.Element {
-  font-family: "Bravura Text";
-  font-size: 20pt;
-}
-
 @keyframes App-logo-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
+}
+
+@font-face {
+    font-family: 'Bravura';
+    src: url('./fonts/Bravura.otf'); /*对于调用点的相对位置*/
+}
+
+.Element {
+  font-family: "Bravura";
+  font-size: var(--element-font-size);
+}
+
+
+.relative-align {
+
+}
+
+.align-north-east {
+  flex-direction: row;
+  align-items: flex-start;
+}
+
+
+.right {
+  position: relative;
+  left: calc(var(--element-font-size)/20)
+}
+
+.left {
+  position: relative;
+  right: calc(var(--element-font-size)/35)
+}
+
+.up-a-bit {
+  position: relative;
+  bottom: calc(var(--element-font-size) * 0.09)
+}
+
+.up-total {
+  position: relative;
+  bottom: calc(var(--element-font-size) * 0.9)
+
+}
+
+.down {
+  position: relative;
+  top: calc(var(--element-font-size) * 0.9)
 }
