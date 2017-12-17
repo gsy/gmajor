@@ -17,8 +17,16 @@ export class FlexLayout extends Component {
     /* parse child style，拿出跟 flexbox 有关的信息，换成 node 的 api */
     this.props.children.map((child, index) => {
       var childNode = Node.create();
-      childNode.setWidth("30%");
-      childNode.setHeight(100);
+      if (child.key > 10) {
+        childNode.setWidth("10%");
+      } else {
+        childNode.setWidth("30%");
+      }
+      if (child.key > 10) {
+        childNode.setHeight(50);
+      } else {
+        childNode.setHeight(80);
+      }
       childNode.setMargin(yoga.EDGE_ALL, 10)
       root.insertChild(childNode, index);
     })

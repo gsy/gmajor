@@ -7,21 +7,23 @@ import {FlexLayout} from './Layout'
 
 
 class FakeMeasure extends Component {
-  /* 是要把 flex 里面的 layout 翻译成 svg 的坐标变换等 api */
-  // 只有一个小节怎么处理？
   render () {
-    const {number, layout, node, root} = this.props
+    const {number, layout} = this.props
     const transformation = `translate(${layout.layout.left},${layout.layout.top})`;
     return (
       <g transform={transformation}>
-        <rect {...layout}
+        <rect width={layout.width}
+              height={layout.height}
               fill="pink"
               stroke="pink"
               strokeWidth="5px"
               />
-        <FlexLayout node={node}>
+        <FlexLayout width={layout.width} height={layout.height}>
           <BeatBox key="11"/>
           <BeatBox key="21" />
+          <BeatBox key="31" />
+          <BeatBox key="41" />
+          <BeatBox key="51" />
         </FlexLayout>
       </g>
     )
@@ -36,7 +38,8 @@ class BeatBox extends Component {
     console.log("layout:", layout)
     return (
       <g transform={transformation}>
-        <rect {...layout}
+        <rect width={layout.width}
+              height={layout.height}
               fill="orange"
               stroke="orange"
               strokeWidth="5px"
