@@ -9,7 +9,7 @@ class Line extends Component {
   render() {
     const {x, y, length, direction} = this.props
 
-    if (direction == "horizontal") {
+    if (direction === "horizontal") {
       return (
         <line x1={x} y1={y} x2={x+length} y2={y} className="string"/>
       )
@@ -69,7 +69,7 @@ export class GuitarMeasure extends Component {
       var string = note['string']
       var fret = note['fret']
 
-      if (note['chord'] == false && i != 0) {
+      if (note['chord'] === false && i !== 0) {
         x = x + step
       }
       // 1 弦最高，y 最小
@@ -123,25 +123,18 @@ export class GuitarMeasure extends Component {
     const fontSize = spacing * 5
     const length = 400
     const lineSpacing = 10
-    const {key, time, measureNo, clef} = this.props
+    const {key, time, measureNo, clef, layout} = this.props
+    const transformation = `translate(${layout.layout.left},${layout.layout.top})`;
 
     return (
-      <svg  xmlns="http://www.w3.org/2000/svg"
-      width="1000" height="1000" viewBox="0 0 1000 1000">
-        <g>
+      <g transform={transformation}>
           {this.drawBarLine(origin, fontSize)}
           {this.drawTab(origin, spacing, spacing * 3)}
           {this.drawStrings(origin, spacing, length, 6)}
           {this.drawNotes(origin, spacing * 1.2, spacing, length, notes)}
           {this.drawBarLine(new Vector(origin.x + length, origin.y), fontSize)}
         </g>
-        <g>
-          {this.drawBarLine(origin2, fontSize)}
-          {this.drawStrings(origin2, spacing, length, 6)}
-          {this.drawNotes(origin2, spacing * 1.2, spacing, length, notes)}
-          {this.drawBarLine(new Vector(origin2.x + length, origin2.y), fontSize)}
-        </g>
-    </svg>
+
     )
   }
 }

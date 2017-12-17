@@ -19,8 +19,6 @@ export class Rectangle {
     return new Vector(this.ne.x, this.sw.y)
   }
 
-
-
   southWest() {
     return this.sw
   }

@@ -2,6 +2,10 @@
   text-align: center;
 }
 
+.rect {
+  border:1px solid orange;
+}
+
 .App-logo {
   animation: App-logo-spin infinite 20s linear;
   height: 80px;
@@ -33,5 +37,7 @@
 }
 
 svg {
+  width: 1000px;
+  height: 600px;
   border:1px solid orange;
 }
