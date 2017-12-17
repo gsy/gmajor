@@ -1,6 +1,3 @@
-:root {
-  --element-font-size: 100px;
-}
 .App {
   text-align: center;
 }
@@ -32,47 +29,9 @@
 
 @font-face {
     font-family: 'Bravura';
-    src: url('./fonts/Bravura.otf'); /*对于调用点的相对位置*/
+    src: url('./fonts/Bravura.svg'); /*对于调用点的相对位置*/
 }
 
-.Element {
-  font-family: "Bravura";
-  font-size: var(--element-font-size);
-}
-
-
-.relative-align {
-
-}
-
-.align-north-east {
-  flex-direction: row;
-  align-items: flex-start;
-}
-
-
-.right {
-  position: relative;
-  left: calc(var(--element-font-size)/20)
-}
-
-.left {
-  position: relative;
-  right: calc(var(--element-font-size)/35)
-}
-
-.up-a-bit {
-  position: relative;
-  bottom: calc(var(--element-font-size) * 0.09)
-}
-
-.up-total {
-  position: relative;
-  bottom: calc(var(--element-font-size) * 0.9)
-
-}
-
-.down {
-  position: relative;
-  top: calc(var(--element-font-size) * 0.9)
+svg {
+  border:1px solid orange;
 }
