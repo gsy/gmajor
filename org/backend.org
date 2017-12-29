@@ -1,0 +1,29 @@
+* 爬虫
+** 运维
+*** 运行
+    - 使用 docker
+    - 使用 kubernetes 管理 docker 容器，k8s 可以做到自动扩容和服务发现，构建微服务的话应该够用了
+*** 代码托管
+    - 自己搭一个 gitlab
+*** 部署
+    - jenkins
+*** 监控
+    - 使用 Prometheus 和 grafana，可以设置报警给 email 或者 slack
+    - http://blog.kubernetes.io/2017/05/kubernetes-monitoring-guide.html
+*** 日志收集
+    - 暂定 elk，logstash 很占内存前期不值得开，找下其他办法
+
+** 实现
+
+
+* 机器
+  - 单机的话，内存起码要 4G
+  - 要把运维相关的工具装好，然后上代码
+  - 爬虫需要几台机器分开爬？爬回来的数据要放到一个分布式的存储里面，是放第三方存储，还是放到 leveldb 之类的存储里面？
+    - 存储的文件是 musicXml
+    - 小文件存储
+      - haystack 及其开源实现 https://github.com/chrislusf/seaweedfs
+    - 文件去重：https://github.com/qiniu/qetag
+  - webserver 需要一台机器，存储需要一台机器吧
+    - webserver 的机器内存开大，存储机器的磁盘 io 开大
+    - 一开头可以是1台，内存和硬盘都开大

@@ -103,6 +103,7 @@ export class Note extends Component {
     /* FIXME: fontSize 跟给出的矩形的关系为什么是 4 要看下 */
     /* 寻找自动对准的方式 */
 
+
     return (
       <svg  xmlns="http://www.w3.org/2000/svg"
         width="500" height="500" viewBox="0 0 500 500"

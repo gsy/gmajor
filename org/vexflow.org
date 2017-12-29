@@ -1,0 +1,141 @@
+* vexflow
+  - https://github.com/0xfe/vexflow
+  - javascript
+  - 除了渲染之外，定义了一套 annotation 的编辑语言，相当于一个文本 editor
+* 代码阅读
+** accidental
+   - 升降号
+   - 这个符号是添加到 note 上面的
+** annotation
+   - 文本，应该是注释类的文本
+** articulation
+   - 加在 note 上面或者下面，表示音量的一个符号
+   - 主要是计算 x，y 坐标
+** barnote
+   - barline
+   - 不同类型有不同宽度
+
+** beam
+   - 斜率计算：计算第一个 note 和最后一个 note 之间的斜率，note 的坐标是自带的属性
+   - beam 是 Element 的一个子类
+*** 构建 beam
+    - notes: beam 所包含的 notes
+    - config
+      - groups: notes 的节奏
+      - stem direction: 符尾的方向
+      - beam_rests:
+      - beam_middle_only: true 表示 beam 放到 beat 的中间
+      - show_stemlets: true 表示画出 stemlets
+      - maintain_stem_directions: true 表示不改变 stem 的方向
+    - generate beam
+      - 给定一组 notes, 划分到不同的 beam group 中
+      - groups 是一个比例，比如 2/8, 遍历所有的 ticks，将 ticks 装到不大于这个比例的 beam group 里面
+
+*** draw
+    #+BEGIN_SRC javascript
+      draw() {
+        this.checkContext();
+        this.setRendered();
+        if (this.unbeamable) return;
+
+        if (!this.postFormatted) {
+          this.postFormat();
+        }
+
+        this.drawStems();
+        this.applyStyle();
+        this.drawBeamLines();
+        this.restoreStyle();
+      }
+    #+END_SRC
+    - 画 stem，然后画 beamlines, beamlines 就是一条直线，beamThickness 是直线的宽度
+** bend
+   - tablature bends
+   - 多个符号的连音符
+   - 画一条曲线
+*** draw 方法
+    #+BEGIN_SRC javascript
+      const start = this.note.getModifierStartXY(Modifier.Position.RIGHT,
+                                                 this.index);
+      start.x += 3;
+      start.y += 0.5;
+      const x_shift = this.x_shift;
+
+      const ctx = this.context;
+      const bend_height = this.note.getStave().getYForTopText(this.text_line) + 3;
+      const annotation_y = this.note.getStave().getYForTopText(this.text_line) - 1;
+      const that = this;
+
+      function renderBend(x, y, width, height) {
+        const cp_x = x + width;
+        const cp_y = y;
+
+        ctx.save();
+        ctx.beginPath();
+        ctx.setLineWidth(that.render_options.line_width);
+        ctx.setStrokeStyle(that.render_options.line_style);
+        ctx.setFillStyle(that.render_options.line_style);
+        ctx.moveTo(x, y);
+        ctx.quadraticCurveTo(cp_x, cp_y, x + width, height);
+        ctx.stroke();
+        ctx.restore();
+      }
+
+    #+END_SRC
+** boudingbox
+   - 矩形盒
+
+** canvascontext
+   - 宽，高等信息
+   - 画图的原语
+
+** clef & clefnote
+   - 调性
+   - 在一个 stave 中间渲染出来
+
+** crescendo
+   - 渐强减弱
+   - 画一个半三角形
+
+** curve
+   - 贝赛尔曲线
+** dot
+   - 附点，在 note 旁边画一个实心圆
+** element
+   - 基类
+   - 功能是
+     - register
+     - get & set attributes
+     - get & set context
+     - get boudingbox
+** formatter
+   - layout 计算，先分成最小单元 ticks，ticks 之间有间隔
+
+** fraction
+   - 比例
+** frethandfinger
+   - 指板图？
+** glyph
+   - 从 font 中根据 code 找到 outline
+
+** modifier
+   - 修改 note 的类
+   - 在 modifiercontext 中使用
+** note
+   - 属性
+     - duration
+     - dots
+     - noteType
+** 基类
+   - Element
+   - Modifier
+   - Glyph
+   - Flow
+   - Fraction
+   - Vex 这个应该是最外层接口
+
+* 问题
+  - notehead, clef 这些是怎么画出来的？字体是怎么使用的？
+  - 布局看起来是从顶级开始，逐层往下算？
+  - 有多少种元素需要画？
+  - 跨 bar 的元素是怎么画的？

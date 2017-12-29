@@ -1,0 +1,40 @@
+* javascript oop 方式
+  - javascript 是 duck typing 的语言
+  - 没有 class 的概念，只有 object
+  - Functions As First-Class Objects
+
+** 原型方式实现定义 object 可以使用的方法
+  #+BEGIN_SRC javascript
+    var Anim = function() {
+        ...
+    };
+    Anim.prototype.start = function() {
+        ...
+    };
+    Anim.prototype.stop = function() {
+        ...
+    };
+
+    /* Usage. */
+    var myAnim = new Anim();
+    myAnim.start();
+      ...
+    myAnim.stop();
+  #+END_SRC
+
+** 在 Function 链上添加方法
+   #+BEGIN_SRC javascript
+     Function.prototype.method = function(name, fn) {
+       this.prototype[name] = fn;
+     };
+     /* Anim class, with methods created using a convenience method. */
+     var Anim = function() {
+         ...
+     };
+     Anim.method('start', function() {
+         ...
+     });
+     Anim.method('stop', function() {
+         ...
+     });
+   #+END_SRC

@@ -14,7 +14,6 @@ export class FlexLayout extends Component {
     root.setJustifyContent(yoga.JUSTIFY_FLEX_START)
     root.setFlexWrap(yoga.WRAP_WRAP)
 
-    /* parse child style，拿出跟 flexbox 有关的信息，换成 node 的 api */
     this.props.children.map((child, index) => {
       var childNode = Node.create();
       if (child.key > 10) {
@@ -27,7 +26,6 @@ export class FlexLayout extends Component {
       } else {
         childNode.setHeight(80);
       }
-      childNode.setMargin(yoga.EDGE_ALL, 10)
       root.insertChild(childNode, index);
     })
 

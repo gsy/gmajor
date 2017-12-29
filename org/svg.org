@@ -1,0 +1,20 @@
+* 坐标系
+  x 轴向右，y 轴向下
+* 单位
+  | Unit | Description                                                |
+  |------+------------------------------------------------------------|
+  | em   | The default font size - usually the height of a character. |
+  | ex   | The height of the character x                              |
+  | px   | Pixels                                                     |
+  | pt   | Points (1 / 72 of an inch)                                 |
+  | pc   | Picas (1 / 6 of an inch)                                   |
+  | cm   | Centimeters                                                |
+  | mm   | Millimeters                                                |
+  | in   | Inches                                                     |
+
+* svg 元素
+  - svg 支持嵌套 svg,嵌套 svg 可以看成一个整体，内部元素的坐标都经过了位移
+* g 元素
+  - g 元素跟嵌套 svg 类似，将多个形状组合成一个 group. 不同的是，g 支持 tranformation
+  - g 元素的确定是不能使用 x, y 坐标定位，只能用 translate(x, y) 进行位移
+* rect 元素

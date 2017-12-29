@@ -1,0 +1,43 @@
+* 使用 smufl 字体画出图形
+** 五线谱
+   - https://www.youtube.com/watch?v=qkt5X_4FJBY
+   - 本身叫 staff
+   - 5 线 4 间
+   - 加线叫 ledger line
+
+** pitch
+   - 确定 x,y
+
+** type + stem
+   画出 noteHead + stem
+   stem 的长度是 3.5 spacing
+   - 3 线以上，stem 连接 head 左边，stem 向下
+   - 3 线以下，stem 连接 head 右边，stem 向上
+   - flag 总是在 head 的右边
+
+** 谱号
+   - 叫 clef
+
+** 升降记号
+   - 叫 sharp/flat sign
+
+** tuplet
+   - 连音的意思，连在一起的部分叫做 beam
+   - beam 要画成斜线，宽度是多少？json 里面有没有说？
+   - 斜率怎么算？给出一组要连接的点 (x1, y1), (x2, y2), ...要依次连接形成斜线
+     - 如果 leftmost(y) < rightmost(y)
+       - 向上的，从右边开始算斜率。k = (y_right - y_near_right) / (x_right - x_near_right)
+     - 如果 leftmost(y) > rightmost(y)
+       - 向下的，从左边开始算。
+     - 知道了斜率之后算出直线另外一个点的坐标，画斜线
+     - beamThickness=0.5
+
+
+** 间隔
+   - 最简单的情况是所有拍子是等间隔分布的
+
+** 横跨不同 note 的元素
+   - 比如 beam 和连音线，都是跨越几个 note 的
+   - 坐标定位 (x, y), x 是确定的，y 怎么确定？
+     - beam 第一个元素和最后一个元素的 y 由符尾的高度决定，中间 note 的高度算斜率算出来，所以要整体考虑
+     - 延音符同理，知道第一个和最后一个元素的 (x, y) 算出高度

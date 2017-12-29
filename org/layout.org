@@ -1,0 +1,88 @@
+* layout 的计算
+  - 设置 child 的 size
+  - 将 child 加入到 root 里面
+  - root 计算出 layout，可以返回的是各个 child 相对于 root 的位置和对应的大小
+
+** 能不能从 xml 就一把算出各个 noteHead 的坐标？
+   - score 是 root 节点，对应的是 svg 的 width 和 height
+   - score 底下是小节 measure。measure 是水平排列，flex row wrap
+   - measure 底下是 note, note 有 duration，duration 对应的是百分比，然后有最小比例
+     - flex = duration
+     - beam 的 duration 是累加的，beam 是作为一个整体去算外部 size 的
+     - beam 的内部是 flex start, justify-content = space between 的
+   - layout 信息作为全局信息保存在一个类里面。根据类型和 number 去获取对应的坐标信息和长宽信息
+   - 类图
+     - score
+       - measure
+         - note
+         - beam
+           - note
+   - 类似于编译原理里面的东西，先转换成一颗内部的 tree
+   - 渲染的时候是写 visitor，从 ast node 转换成 svg 的节点
+   - 内部节点怎么表示？visitor 怎么写？
+     - dom tree node 转换成内部表示的 node，同样的组织成树形
+     - node 包含 attribute, width, height, x, y 等信息
+     - 不同节点被访问到的时候有一个转换函数
+       #+BEGIN_SRC python
+         def visit(tree):
+             self.doVisit(tree.node)
+             children = tree.children()
+             for child in children:      # 广度优先遍历
+                 visit(child)
+       #+END_SRC
+     - visit 可以更 specifiy 一点，就是转换成 react element
+     - xml -> ast -> react element 这样的转换
+     - visitor 要做的事情是对 node 节点打上标签，收集下 meta 信息。这个信息存在什么地方呢？
+       - 存在 node 本身？
+       - demo
+         #+BEGIN_SRC javascript
+           var node = Node.create();
+           node.setWidth("10%");
+           node.setHeight(50);
+           parent.insertChild(node, index);
+         #+END_SRC
+         - 可以算出来 left, right, top, bottom 的坐标
+         - 使用 svg 的 translate 可以算出
+     - 渲染是怎么做的？
+       - 生成 react element
+         - react.createElement?
+
+
+** tidb 的 visitor 是怎么做的？
+   - Accept 接口：注册一个 Visitor，这个 Visitor 会生成一个新的 node
+   - Visitor 是个接口，挂了两个函数，Enter 和 Leave，调用的话都会生成新的 node，node 的类型和原来是一样的。同时返回一个 bool 值指示是不是要终止 visit
+   - node 节点在调用 Accept 接口的时候，执行 visitor 的 Enter 和 Leave 函数
+   - Visitor 有 context 变量，会把中间的接口 push 到 contenxt 里面保存
+   - ast 只要要交给优化器重写 sql，重新组织树形结构
+
+* layout 到 svg 的换算
+  - 利用 transform 相对于 parent 进行坐标变换，相对坐标
+  - 利用绝对坐标？
+  - transform 好像有性能问题，如果不行的话，考虑后端渲染
+  - 后端渲染还有个好处是，如果以后要支持上传 pdf 或者图片识别谱子的话，需要从算法里面提取中中间结果，然后再转成 musicxml。这件事情要在后端完成
+    #+BEGIN_SRC javascript
+      switch(node.type) {
+      case "note":
+        return <Note />
+      case "beam":
+        return <Beam />
+      }
+    #+END_SRC
+
+
+* 使用 node-xml2js 解析 xml
+  - 利用其中的 hook 函数动态的构建出一颗 ast
+  - react 面对的是 ast，ast 的每个节点对应着一种渲染方法
+    - Element
+      - render()
+      - children()
+  - node 应该有一个上下文，child 的 layout 上下文就是它的父亲
+  - layout 是一个 grid 布局，横坐标上将空间看成 grid，每个 note 可以坐落在 grid 的 cell 中，cell 可以垂直添加元素和水平添加元素
+    - cell 的定位是 note 的定位，所有在 cell 里面的东西以 cell 的坐标为准
+  - note 除了要 render 自身之外，还需要 render attachment
+    - attachment 的位置都是相对于 note 的位置来相对定位的
+    - 多个 attachment 之间定位不能冲突，所以不能 hardcode。比如有附点，有升降号，有连音，有 beam
+    - 如果把 attachment 当成是 note 的一个 flag，渲染的时候考虑呢，比如有附点的 note 占用的空间要多一点点
+    - 还要考虑到换行换页的问题，最小的渲染单位是 bar，一行里面 bar 的数目总是固定的，bar 的大小应该是固定的
+
+* lilypond
