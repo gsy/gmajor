@@ -69,7 +69,6 @@
       }
     #+END_SRC
 
-
 * 使用 node-xml2js 解析 xml
   - 利用其中的 hook 函数动态的构建出一颗 ast
   - react 面对的是 ast，ast 的每个节点对应着一种渲染方法
