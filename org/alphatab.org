@@ -1,3 +1,0 @@
-* alpahtab
-  - https://github.com/CoderLine/alphaTab
-  - 开源项目，c# 写的
