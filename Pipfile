@@ -13,6 +13,9 @@ name = "pypi"
 
 flask = "*"
 flask-login = "*"
+flask-sqlalchemy = "*"
+flask-migrate = "*"
+attrs = "*"
 
 
 [requires]
