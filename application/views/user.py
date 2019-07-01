@@ -9,8 +9,23 @@ from application.views.schema import ApiResult
 user_bp = Blueprint('user', __name__, url_prefix='/users')
 
 
+@user_bp.route("/signup", method=["POST"])
+def signup():
+    data = request.json()
+    email = data['email']
+    username = data['username']
+    password = data['password']
+
+    user = user_dao.query_user(username=username)
+    if user is not None:
+        return jsonify(ApiResult(code=400, msg='username is duplicated'))
+
+    user_dao.create_user(username=username, email=email, password=password)
+    return jsonify(ApiResult())
+
+
 @user_bp.route("/login", method=["POST"])
-def login(username, password):
+def login():
     data = request.json()
     username = data['username']
     password = data['password']
@@ -28,3 +43,10 @@ def login(username, password):
 def logout():
     logout_user()
     return jsonify(ApiResult())
+
+
+@user_bp.route("/oauth/wechat/login", method=["POST"])
+def wx_login():
+    '''申请微信权限中
+    '''
+    pass
